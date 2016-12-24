@@ -1,0 +1,66 @@
+
+
+<html>
+  <head>
+    <title>Water Cannister</title>
+    <style>
+      
+      body { margin: 0px; padding: 0px }
+
+      canvas {
+          display: block;
+          width: 100%;
+          height: 100%;
+      }
+
+    </style>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/three-r80.min.js"></script>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/tw.js"></script>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/OrbitControls.js"></script>
+    <script src="watercannister.js"></script>
+  </head>
+<body>
+
+<script>
+var scene = new THREE.Scene();
+var renderer = new THREE.WebGLRenderer();
+
+cann = createWaterCannister();
+scene.add(cann)
+
+TW.mainInit(renderer, scene);
+
+var cameraFOVY = 100;
+
+//-------------------------
+// TESTING WITH LIGHTING
+//-------------------------
+
+    //create a spotlight
+    var spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.name = "spot";
+    spotLight.position.set(10,50,50); 
+
+    spotLight.target.position.set = (0,20,0);
+    
+    scene.add(spotLight);
+    scene.add(spotLight.target);
+
+var ambLight = new THREE.AmbientLight( 0xffffff); // soft white light 
+    ambLight.name = "ambient";
+    scene.add( ambLight );
+
+var state = TW.cameraSetup(renderer,
+                           scene,
+                           {minx: -10, maxx: 10,
+                            miny: 0, maxy:40,
+                            minz: -10, maxz: 10},
+                           cameraFOVY);
+
+
+TW.render();
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+
+<html>
+  <head>
+    <title>Nighthawks Indoor Scene</title>
+    <style>
+      
+      body { margin: 0px; padding: 0px }
+
+      canvas {
+          display: block;
+          width: 100%;
+          height: 100%;
+      }
+
+    </style>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/three-r80.min.js"></script>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/tw.js"></script>
+    <script src="https://cs.wellesley.edu/~cs307/threejs/libs/OrbitControls.js"></script>
+    <script src="./bar-stool.js"></script>
+    <script src="./watercannister.js"></script>
+    <script src="./counter.js"></script>
+  </head>
+<body>
+
+<script>
+
+var sceneParams = {
+  counterRadius: 10,
+  counterRadiusSegments:32,
+  radiusSegments: 2,
+  tubularSegments: 30,
+  metalColor: 0x808080,
+  metalSpecular: 0x444444,
+  woodColor: 0x512B1E,
+  counterTopColor: 0x3C2B13,
+  metalShininess: 5,
+  baseRadius: 4,
+  spotlightColor: 0xffffff,
+}
+
+var scene = new THREE.Scene();
+var renderer = new THREE.WebGLRenderer();
+
+cannister = createWaterCannister();
+cannister2 = cannister.clone();
+counter = createCounter();
+
+counter.scale.set(2,2,2);
+
+cannister.position.x = -15
+cannister.position.y = sceneParams.counterRadius*1.6;
+cannister2.position.y = sceneParams.counterRadius*1.6;
+cannister2.position.x = -30;
+counter.position.y = sceneParams.baseRadius*2;
+
+stool = barStool(sceneParams.woodColor);
+stool.scale.set(.5,.5, .5);
+stool.position.x = -40;
+stool.position.z = 40;
+
+stool2 = stool.clone();
+stool2.position.x = -55;
+stool2.position.z = 23;
+
+scene.add(cannister);
+scene.add(cannister2);
+scene.add(counter);
+scene.add(stool);
+scene.add(stool2);
+
+TW.mainInit(renderer,scene);
+
+var cameraFOVY = 100;
+
+//-------------------------
+// TESTING WITH LIGHTING
+//-------------------------
+
+    //create a spotlight
+    var spotLight = new THREE.SpotLight( sceneParams.spotlightColor );
+    spotLight.name = "spot";
+    spotLight.position.set(10,50,50); 
+
+    spotLight.target.position.set = (0,20,0);
+    
+    scene.add(spotLight);
+    scene.add(spotLight.target);
+
+var ambLight = new THREE.AmbientLight( sceneParams.ambLightColor); // soft white light 
+    ambLight.name = "ambient";
+    scene.add( ambLight );
+
+var state = TW.cameraSetup(renderer,
+                           scene,
+                           {minx: -20, maxx: 20,
+                            miny: 0, maxy: 40,
+                            minz: -10, maxz: 60},
+                           cameraFOVY);
+
+TW.render();
+
+</script>
+</body>
+</html>
+
